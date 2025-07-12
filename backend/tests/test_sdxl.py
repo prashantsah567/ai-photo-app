@@ -20,7 +20,7 @@ refiner.to("cuda")
 n_steps = 40
 high_noise_frac = 0.8
 
-prompt = "A man standing on top of Burj Khalifa on a rainy day"
+prompt = "A majestic lion jumping from a big stone at night"
 
 # run both experts
 image = base(
@@ -35,3 +35,8 @@ image = refiner(
     denoising_start=high_noise_frac,
     image=image,
 ).images[0]
+
+print(type(image))
+
+# Save to disk
+image.save("output.png")
