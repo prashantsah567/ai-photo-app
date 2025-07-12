@@ -20,7 +20,7 @@ refiner.to("cuda")
 n_steps = 40
 high_noise_frac = 0.8
 
-prompt = "A majestic lion jumping from a big stone at night"
+prompt = "A man standing on top of Burj Khalifa on a rainy day"
 
 # run both experts
 image = base(
