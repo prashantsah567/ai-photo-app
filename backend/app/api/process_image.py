@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, Form
-from app.services.ai import generate_image
+from backend.app.services.replicate import generate_image
 from app.utils.s3 import upload_file_to_s3
 
 router = APIRouter()
