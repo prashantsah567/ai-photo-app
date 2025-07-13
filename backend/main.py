@@ -3,7 +3,7 @@ load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.app.api import process_image_replicate
+from app.api import process_image_replicate
 from pathlib import Path
 from app.api import generate_runpod
 
