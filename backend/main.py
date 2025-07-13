@@ -9,10 +9,6 @@ from app.api import generate_runpod
 
 app = FastAPI()
 
-from dotenv import dotenv_values
-config = dotenv_values("backend/.env")  # returns a dict
-print("Config",config.values)
-
 # CORS setup for local frontend to call backend
 app.add_middleware(
     CORSMiddleware,
