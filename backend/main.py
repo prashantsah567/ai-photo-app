@@ -3,8 +3,9 @@ load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import process_image
+from backend.app.api import process_image_replicate
 from pathlib import Path
+from app.api import generate_runpod
 
 app = FastAPI()
 
@@ -25,5 +26,6 @@ app.add_middleware(
 def root():
     return {"message":"Backend running"}
 
-# enables the new POST /api/process route
-app.include_router(process_image.router)
+# enables all POST requests
+app.include_router(process_image_replicate.router)
+app.include_router(generate_runpod.router)

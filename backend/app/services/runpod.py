@@ -1,8 +1,9 @@
 from diffusers import DiffusionPipeline
 import torch
+import uuid
 
 #function that generate image from a prompt (on runpod) and save output as output.png
-def generate_image(prompt: str, output_path: str = "output.png"):
+def generate_image(prompt: str, output_path: str = None):
     
     # load both base model
     base = DiffusionPipeline.from_pretrained(
@@ -27,6 +28,10 @@ def generate_image(prompt: str, output_path: str = "output.png"):
     # Define how many steps and what % of steps to be run on each experts (80/20) here
     n_steps = 40
     high_noise_frac = 0.8
+
+    # set the output path if not given
+    if output_path is None:
+        output_path = f"{uuid.uuid4().hex}.png"
 
     # generate with base
     latents = base(
