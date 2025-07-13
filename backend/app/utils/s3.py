@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import boto3
 import os
 import uuid
@@ -10,19 +13,22 @@ s3 = boto3.client(
     region_name=os.getenv("AWS_REGION")
 )
 
-print("AWS_BUCKET_NAME::::::::::::::::::::::::::::::::: ", os.getenv("S3_BUCKET"))
-
-def upload_file_to_s3(file: UploadFile):
+def upload_file_to_s3(file_path: str):
     bucket = os.getenv("S3_BUCKET")
     folder = os.getenv("S3_FOLDER")
+
+    if not bucket or not folder or not os.getenv("AWS_REGION"):
+        raise ValueError("One or more required environment variables are missing.")
+    
     unique_filename = f"{folder}/{uuid.uuid4()}-filename"
 
-    s3.upload_fileobj(
-        file.file, # the actual file stream
-        bucket,
-        unique_filename,
-        ExtraArgs={"ContentType": file.content_type}
-    )
+    with open(file_path, "rb") as f:
+        s3.upload_fileobj(
+            f, # open file stream
+            bucket,
+            unique_filename,
+            ExtraArgs={"ContentType": "image/png"}
+        )
 
     public_url = f"https://{bucket}.s3.{os.getenv('AWS_REGION')}.amazonaws.com/{unique_filename}"
     return public_url
