@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from services.runpod import generate_image
+from app.services.runpod import generate_image
 
 #exposing runpod image generator function via Fast API (to call from frontend)
 
