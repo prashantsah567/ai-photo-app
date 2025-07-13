@@ -34,7 +34,7 @@ def generate_image(prompt: str, output_path: str = None):
         output_path = f"{uuid.uuid4().hex}.png"
 
     # generate with base
-    latents = base(
+    image = base(
         prompt=prompt,
         num_inference_steps=n_steps,
         denoising_end=high_noise_frac,
