@@ -2,41 +2,35 @@
 import { useState } from 'react'
 
 export default function UploadForm() {
-  const [image, setImage] = useState(null)
-  const [previewUrl, setPreviewUrl] = useState(null)
   const [prompt, setPrompt] = useState('')
   const [loading, setLoading] = useState(false)
   const [resultUrl, setResultUrl] = useState(null)
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0]
-    setImage(file)
-    setPreviewUrl(URL.createObjectURL(file))
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!image || !prompt) return alert('Please select an image and enter a prompt.')
+    if (!prompt.trim()) return alert('Please enter a prompt.')
 
     setLoading(true)
-    const formData = new FormData()
-    formData.append('image', image)
-    formData.append('prompt', prompt)
-
-    console.log("Constructed URL ==========", `${process.env.NEXT_PUBLIC_API_URL}/api/process`)
+    setResultUrl(null)
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/process`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/runpod-generate`, {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({prompt})
       })
-      console.log("Response status:", res)
+      
+      if (!res.ok) throw new Error('Failed to generate image')
+
       const data = await res.json()
-      console.log('Success:', data)
+
       // Show result (output image)
-      setResultUrl(data.image)
+      setResultUrl(data.file_url || data.file)
     } catch (err) {
       console.error('Error:', err)
+      alert('Something went wrong')
     } finally {
       setLoading(false)
     }
@@ -44,22 +38,11 @@ export default function UploadForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto p-4 border rounded-xl shadow">
-      <h2 className="text-xl font-semibold">Enhance Your Photo</h2>
-
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleImageChange}
-        className="block w-full border rounded p-2"
-      />
-
-      {previewUrl && (
-        <img src={previewUrl} alt="Preview" className="w-full h-auto rounded shadow" />
-      )}
+      <h2 className="text-xl font-semibold">Generate AI Image</h2>
 
       <input
         type="text"
-        placeholder="e.g. make me look more muscular"
+        placeholder="Descibe your image..."
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
         className="block w-full border rounded p-2"
@@ -70,15 +53,15 @@ export default function UploadForm() {
         className="w-full bg-blue-600 text-white p-2 rounded disabled:opacity-50"
         disabled={loading}
       >
-        {loading ? 'Processing...' : 'Enhance Image'}
+        {loading ? 'Generating...' : 'Generate'}
       </button>
 
-      {/*output image*/}
+      {loading && <p className='text-center text-gray-500'>Please wait, generating image...</p>}
 
       {resultUrl && (
         <div className="mt-6">
-          <h3 className="text-lg font-medium mb-2">Enhanced Image</h3>
-          <img src={resultUrl} alt="AI result" className="rounded shadow" />
+          <h3 className="text-lg font-medium mb-2">Result</h3>
+          <img src={resultUrl} alt="Generated" className="rounded shadow" />
         </div>
       )}
     </form>
