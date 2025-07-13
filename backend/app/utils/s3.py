@@ -6,6 +6,10 @@ import os
 import uuid
 from fastapi import UploadFile
 
+from dotenv import dotenv_values
+config = dotenv_values("backend/.env")  # returns a dict
+print("Config",config.values)
+
 s3 = boto3.client(
     "s3",
     aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
