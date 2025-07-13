@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-load_dotenv("backend/.env")
+load_dotenv()
 
 import boto3
 import os
