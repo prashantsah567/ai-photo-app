@@ -16,10 +16,6 @@ s3 = boto3.client(
 def upload_file_to_s3(file_path: str):
     bucket = os.getenv("S3_BUCKET")
     folder = os.getenv("S3_FOLDER")
-    
-    print("bucket:", bucket)
-    print("folder:", folder)
-    print("region:", os.getenv("AWS_REGION"))
 
     if not bucket or not folder or not os.getenv("AWS_REGION"):
         raise ValueError("One or more required environment variables are missing.")
