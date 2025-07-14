@@ -18,7 +18,7 @@ def generate_endpoint(request: PromptRequest):
         print(f"Generated image saved to : {output_file}")
         image_url = upload_file_to_s3(output_file)
         print("Image URL:",image_url)
-        return {"status": "success", "file": output_file}
+        return {"status": "success", "file": image_url}
     except Exception as e:
         print(f"Error during generation: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

@@ -27,7 +27,7 @@ export default function UploadForm() {
       const data = await res.json()
 
       // Show result (output image)
-      setResultUrl(data.file_url || data.file)
+      setResultUrl(data.file)
     } catch (err) {
       console.error('Error:', err)
       alert('Something went wrong')
